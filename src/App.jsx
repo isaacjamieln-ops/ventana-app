@@ -5,7 +5,8 @@ import Home from './components/Home';
 import About from './components/About';
 import Contact from './components/Contact';
 import Rules from './components/Rules';
-import GameInfo from './components/GameInfo'; // Este es el componente de schedule
+import GameInfo from './components/GameInfo';
+import GameDetail from './components/GameDetail'; // Nuevo componente
 import Registration from './components/Registration';
 import './styles/App.css';
 
@@ -19,7 +20,8 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/rules" element={<Rules />} />
-          <Route path="/games" element={<GameInfo />} /> {/* Ruta /games para el schedule */}
+          <Route path="/games" element={<GameInfo />} />
+          <Route path="/game/:id" element={<GameDetail />} /> {/* Nueva ruta con parámetro */}
           <Route path="/register" element={<Registration />} />
         </Routes>
       </div>
