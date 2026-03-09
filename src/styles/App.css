@@ -1,0 +1,28 @@
+/* Estilos para NavLink activo */
+.navbar-dark .navbar-nav .nav-link.active {
+  color: #fff !important;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+  font-weight: bold !important;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: rgba(255, 255, 255, 0.85) !important;
+  padding: 0.5rem 1rem !important;
+  transition: all 0.2s;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  color: #fff !important;
+}
+
+.navbar-brand {
+  color: #fff !important;
+  font-weight: bold;
+}
+
+.navbar-brand:hover {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
