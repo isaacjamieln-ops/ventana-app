@@ -8,20 +8,22 @@ const GameInfo = () => {
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [showMap, setShowMap] = useState(false);
 
-  // Agrupar juegos por mes y agregar ID
-  const gamesByMonth = Object.values(games).reduce((acc, game) => {
-    if (!acc[game.month]) {
-      acc[game.month] = [];
-    }
-    // Encontrar el ID del juego (la clave en el objeto games)
-    const gameId = Object.keys(games).find(key => games[key] === game);
-    acc[game.month].push({ ...game, id: gameId });
+  // Validar si games es array o objeto
+  const gameList = Array.isArray(games)
+    ? games.map((game, index) => ({ ...game, id: index }))
+    : Object.keys(games || {}).map(key => ({ ...games[key], id: key }));
+
+  // Agrupar por mes
+  const gamesByMonth = gameList.reduce((acc, game) => {
+    if (!acc[game.month]) acc[game.month] = [];
+    acc[game.month].push(game);
     return acc;
   }, {});
 
-  // Ordenar los meses
   const monthOrder = { September: 1, October: 2 };
-  const sortedMonths = Object.keys(gamesByMonth).sort((a, b) => monthOrder[a] - monthOrder[b]);
+  const sortedMonths = Object.keys(gamesByMonth).sort(
+    (a, b) => (monthOrder[a] || 999) - (monthOrder[b] || 999)
+  );
 
   const handleLocationClick = (locationKey) => {
     setSelectedLocation(locationKey);
@@ -54,27 +56,22 @@ const GameInfo = () => {
                 </tr>
               </thead>
               <tbody>
-                {gamesByMonth[month].map((game, index) => (
-                  <tr key={index}>
+                {gamesByMonth[month].map((game, idx) => (
+                  <tr key={idx}>
                     <td className="fw-bold">{game.date}</td>
                     <td>{game.team1} vs {game.team2}</td>
                     <td>
-                      <Button 
-                        variant="link" 
+                      <Button
+                        variant="link"
                         className="p-0 text-decoration-none"
                         onClick={() => handleLocationClick(game.locationKey)}
                       >
-                        {locations[game.locationKey]?.name}
+                        {locations[game.locationKey]?.name || 'TBD'}
                       </Button>
                     </td>
                     <td>{game.time}</td>
                     <td>
-                      <Button
-                        as={Link}
-                        to={`/game/${game.id}`}
-                        variant="primary"
-                        size="sm"
-                      >
+                      <Button as={Link} to={`/game/${game.id}`} variant="primary" size="sm">
                         View Details
                       </Button>
                     </td>
@@ -96,7 +93,7 @@ const GameInfo = () => {
                   <p><strong>Facility Type:</strong> Outdoor</p>
                 </Col>
                 <Col md={6}>
-                  <p><strong>Weather Policy:</strong> If deemed necessary by NYSL, games may be shortened or cancelled due to extreme weather conditions.</p>
+                  <p><strong>Weather Policy:</strong> Games may be shortened or cancelled due to extreme weather conditions.</p>
                 </Col>
               </Row>
               <hr />
@@ -109,26 +106,27 @@ const GameInfo = () => {
         </Col>
       </Row>
 
-      {/* Modal para el mapa */}
       <Modal show={showMap} onHide={() => setShowMap(false)} size="lg">
         <Modal.Header closeButton>
           <Modal.Title>Location Map</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {selectedLocation && locations[selectedLocation]?.mapUrl && (
+          {selectedLocation && locations[selectedLocation]?.mapUrl ? (
             <div>
               <h5>{locations[selectedLocation].name}</h5>
               <p>{locations[selectedLocation].address}</p>
-              <iframe 
-                src={locations[selectedLocation].mapUrl} 
-                width="100%" 
-                height="450" 
-                style={{ border: 0 }} 
-                allowFullScreen 
-                loading="lazy" 
-                title={locations[selectedLocation].name} 
+              <iframe
+                src={locations[selectedLocation].mapUrl}
+                width="100%"
+                height="450"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                title={locations[selectedLocation].name}
               />
             </div>
+          ) : (
+            <p>No map selected</p>
           )}
         </Modal.Body>
       </Modal>

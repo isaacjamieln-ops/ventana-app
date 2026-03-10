@@ -7,8 +7,8 @@ const GameDetail = () => {
   const { id } = useParams(); // Obtiene el parámetro de la URL
   const { games, locations } = nyslData;
 
-  // Buscar el juego por ID
-  const game = games[id];
+  // Aseguramos que games sea un array o un objeto
+  const game = games[id] || null;
 
   if (!game) {
     return (
@@ -54,8 +54,8 @@ const GameDetail = () => {
               <Row className="mb-4">
                 <Col>
                   <h5 className="text-primary">Location</h5>
-                  <p className="h5">{location?.name}</p>
-                  <p className="text-muted">{location?.address}</p>
+                  <p className="h5">{location?.name || 'TBD'}</p>
+                  <p className="text-muted">{location?.address || ''}</p>
                 </Col>
               </Row>
 

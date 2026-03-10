@@ -1,53 +1,46 @@
 import React from 'react';
-import { Container, Row, Col, Card, Accordion } from 'react-bootstrap';
-import nyslData from '../data/nyslData';
+import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const Rules = () => {
-  const rules = nyslData?.rules || {};
-
   return (
     <Container>
-      <Row className="justify-content-center mb-4">
+      <Row className="justify-content-center mt-4 mb-4">
         <Col md={10} className="text-center">
-          <h1 className="display-4 text-primary mb-3">Rules of Play & Policies</h1>
-          <p className="lead">FIFA rules shall govern NYSL play except as modified herein.</p>
+          <h1 className="display-4 text-primary">NYSL Rules and Policies</h1>
+          <p className="mt-3">Northside Youth Soccer League strives to provide a safe, fun, and fair environment for all players.</p>
         </Col>
       </Row>
 
-      <Row className="justify-content-center">
+      <Row className="justify-content-center mb-4">
         <Col md={10}>
-          <Accordion defaultActiveKey="0" className="shadow-sm">
-            <Accordion.Item eventKey="0">
-              <Accordion.Header><strong>SPORTSMANSHIP</strong></Accordion.Header>
-              <Accordion.Body>{rules.sportsmanship}</Accordion.Body>
-            </Accordion.Item>
+          <Card className="shadow-sm p-3">
+            <h3 className="text-primary mb-3">General Rules</h3>
+            <ul>
+              <li>All players must wear proper equipment during games.</li>
+              <li>Games are played on Saturdays according to the published schedule.</li>
+              <li>Coaches and referees have the final authority on game decisions.</li>
+              <li>Sportsmanship is expected at all times from players, coaches, and spectators.</li>
+            </ul>
 
-            <Accordion.Item eventKey="1">
-              <Accordion.Header><strong>FIFA FIELD REGULATIONS</strong></Accordion.Header>
-              <Accordion.Body>
-                <ol>
-                  {rules.fifaRegulations?.map((rule, idx) => (
-                    <li key={idx} className="mb-2">{rule}</li>
-                  ))}
-                </ol>
-              </Accordion.Body>
-            </Accordion.Item>
+            <h3 className="text-primary mt-4 mb-3">Policies</h3>
+            <ul>
+              <li>If games are cancelled due to weather, updates will be posted on the website.</li>
+              <li>Players must register before the season starts to be eligible to play.</li>
+              <li>Parents should contact the League Coordinator for any questions or concerns.</li>
+            </ul>
 
-            <Accordion.Item eventKey="2">
-              <Accordion.Header><strong>EQUIPMENT</strong></Accordion.Header>
-              <Accordion.Body>{rules.equipment}</Accordion.Body>
-            </Accordion.Item>
-
-            <Accordion.Item eventKey="3">
-              <Accordion.Header><strong>SUBSTITUTIONS</strong></Accordion.Header>
-              <Accordion.Body>{rules.substitutions}</Accordion.Body>
-            </Accordion.Item>
-
-            <Accordion.Item eventKey="4">
-              <Accordion.Header><strong>ALL-PLAY</strong></Accordion.Header>
-              <Accordion.Body>{rules.allPlay}</Accordion.Body>
-            </Accordion.Item>
-          </Accordion>
+            <Row className="mt-4">
+              <Col className="d-flex justify-content-between">
+                <Button as={Link} to="/" variant="outline-secondary">
+                  Home
+                </Button>
+                <Button as={Link} to="/games" variant="outline-primary">
+                  Game Schedule
+                </Button>
+              </Col>
+            </Row>
+          </Card>
         </Col>
       </Row>
     </Container>

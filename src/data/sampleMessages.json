@@ -1,0 +1,71 @@
+{
+  "messages": {
+    "game-1": {
+      "msg1": {
+        "author": "maria@email.com",
+        "authorName": "María González",
+        "text": "¡Qué buen partido! Los niños jugaron increíble hoy.",
+        "timestamp": 1709568000000,
+        "photoURL": "https://ui-avatars.com/api/?name=Maria+Gonzalez&background=random"
+      },
+      "msg2": {
+        "author": "carlos@email.com",
+        "authorName": "Carlos Rodríguez",
+        "text": "El próximo sábado necesitamos 2 voluntarios para las bebidas.",
+        "timestamp": 1709571600000,
+        "photoURL": "https://ui-avatars.com/api/?name=Carlos+Rodriguez&background=random"
+      },
+      "msg3": {
+        "author": "laura@email.com",
+        "authorName": "Laura Martínez",
+        "text": "Yo puedo llevar las bebidas. ¿A qué hora debemos llegar?",
+        "timestamp": 1709575200000,
+        "photoURL": "https://ui-avatars.com/api/?name=Laura+Martinez&background=random"
+      },
+      "msg4": {
+        "author": "ana@email.com",
+        "authorName": "Ana López",
+        "text": "¡Qué emoción! Mi hijo metió su primer gol. Gracias a todos por el apoyo.",
+        "timestamp": 1709578800000,
+        "photoURL": "https://ui-avatars.com/api/?name=Ana+Lopez&background=random"
+      },
+      "msg5": {
+        "author": "pedro@email.com",
+        "authorName": "Pedro Sánchez",
+        "text": "¿Alguien sabe si habrá entrenamiento el jueves por el feriado?",
+        "timestamp": 1709582400000,
+        "photoURL": "https://ui-avatars.com/api/?name=Pedro+Sanchez&background=random"
+      },
+      "msg6": {
+        "author": "javier@email.com",
+        "authorName": "Javier Torres",
+        "text": "Sí, hay entrenamiento normal el jueves. Ya confirmó el entrenador.",
+        "timestamp": 1709586000000,
+        "photoURL": "https://ui-avatars.com/api/?name=Javier+Torres&background=random"
+      },
+      "msg7": {
+        "author": "sonia@email.com",
+        "authorName": "Sonia Ruiz",
+        "text": "Necesito la talla de camiseta de mi hijo para el torneo. ¿Alguien tiene el formato?",
+        "timestamp": 1709589600000,
+        "photoURL": "https://ui-avatars.com/api/?name=Sonia+Ruiz&background=random"
+      }
+    },
+    "game-2": {
+      "msg1": {
+        "author": "roberto@email.com",
+        "authorName": "Roberto Díaz",
+        "text": "Excelente organización hoy. Los niños disfrutaron mucho.",
+        "timestamp": 1709593200000,
+        "photoURL": "https://ui-avatars.com/api/?name=Roberto+Diaz&background=random"
+      },
+      "msg2": {
+        "author": "elena@email.com",
+        "authorName": "Elena Castro",
+        "text": "¿Quién tiene las fotos del partido? Las queremos para el álbum.",
+        "timestamp": 1709596800000,
+        "photoURL": "https://ui-avatars.com/api/?name=Elena+Castro&background=random"
+      }
+    }
+  }
+}
