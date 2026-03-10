@@ -1,53 +1,93 @@
+// src/firebase.js
+
+// Importa lo necesario de Firebase
 import { initializeApp } from "firebase/app";
-import { 
-  getAuth, 
-  GoogleAuthProvider, 
-  signInWithPopup, 
-  signOut 
-} from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from "firebase/auth";
+import { getDatabase, ref, push, onValue } from "firebase/database";
+import { useState, useEffect } from "react";
 
-import { getDatabase } from "firebase/database";
-import { useAuthState } from 'react-firebase-hooks/auth';
 
+// Configuración de tu Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyBp7uyQGenv7Tnw6SC5KqjTKz1MeDJ1IMo",
   authDomain: "ventana-app-nyls.firebaseapp.com",
+  databaseURL: "https://ventana-app-nyls-default-rtdb.firebaseio.com",
   projectId: "ventana-app-nyls",
-  storageBucket: "ventana-app-nyls.firebasestorage.app",
+  storageBucket: "ventana-app-nyls.appspot.com",
   messagingSenderId: "168101626192",
-  appId: "1:168101626192:web:d1d47fdd6412ba4ab66c55",
-  databaseURL: "https://ventana-app-nyls-default-rtdb.firebaseio.com"
+  appId: "1:168101626192:web:d1d47fdd6412ba4ab66c55"
 };
 
+// Inicializa Firebase
 const app = initializeApp(firebaseConfig);
 
+// Auth
 const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+// Database
 const database = getDatabase(app);
 
-const googleProvider = new GoogleAuthProvider();
-
-export const signInWithGoogle = async () => {
-  try {
-    const result = await signInWithPopup(auth, googleProvider);
-    return result.user;
-  } catch (error) {
-    console.error("Error signing in:", error);
-    throw error;
-  }
+// Funciones de autenticación
+const signInWithGoogle = async () => {
+  await signInWithPopup(auth, provider);
 };
 
-export const signOutUser = async () => {
-  try {
-    await signOut(auth);
-  } catch (error) {
-    console.error("Error signing out:", error);
-    throw error;
-  }
+const signOutUser = async () => {
+  await signOut(auth);
 };
 
-export const useUserState = () => {
-  const [user, loading, error] = useAuthState(auth);
-  return { user, loading, error };
+// Hook para obtener estado del usuario
+const useUserState = () => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(u => {
+      setUser(u);
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  return { user, loading };
 };
 
-export { auth, database };
+// Funciones de mensajes
+const sendMessage = async (user, text, gameId) => {
+  if (!user || !text) return;
+
+  const messagesRef = ref(database, `games/${gameId}/messages`);
+  await push(messagesRef, {
+    text,
+    user: {
+      uid: user.uid,
+      name: user.displayName || user.email,
+      photoURL: user.photoURL || null
+    },
+    timestamp: Date.now()
+  });
+};
+
+const listenMessages = (gameId, callback) => {
+  const messagesRef = ref(database, `games/${gameId}/messages`);
+  return onValue(messagesRef, snapshot => {
+    const data = snapshot.val() || {};
+    const messages = Object.entries(data).map(([id, value]) => ({
+      id,
+      ...value
+    }));
+    callback(messages);
+  });
+};
+
+// Exporta todo
+export {
+  auth,
+  database,
+  signInWithGoogle,
+  signOutUser,
+  useUserState,
+  sendMessage,
+  listenMessages
+};

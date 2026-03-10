@@ -1,163 +1,175 @@
 // src/components/GameMessages.jsx
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-
-// 📁 Importaciones desde firebase.js en la raíz
-import { useUserState } from '../firebase';
-import { ref, push, onValue } from "firebase/database";
-import { database } from "../firebase";
-
-import MessageList from './MessageList';
-import './MensajesJuego.css';
-
+import { useParams } from 'react-router-dom';
+import { database, auth } from '../firebase';
+import { ref, push, onValue } from 'firebase/database';
 
 function GameMessages() {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const { user, loading: authLoading } = useUserState();
-
+  const { id: gameId } = useParams();
+  const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-  const [messages, setMessages] = useState({});
-  const [sending, setSending] = useState(false);
+  const [user, setUser] = useState(null);
+  const [error, setError] = useState('');
 
-  // Depuración
+  // Escuchar cambios en la autenticación
   useEffect(() => {
-    console.log("✅ GameMessages montado - ID:", id);
-    console.log("👤 Usuario:", user?.email);
-  }, [id, user]);
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setUser(user);
+    });
+    return unsubscribe;
+  }, []);
 
   // Cargar mensajes
   useEffect(() => {
-    if (!id) {
-      console.error("❌ No hay ID del partido");
-      return;
-    }
+    if (!gameId) return;
 
-    const messagesRef = ref(database, `messages/${id}`);
-    console.log("📡 Escuchando:", `messages/${id}`);
-
-    const unsubscribe = onValue(messagesRef, (snapshot) => {
-      const data = snapshot.val();
-      console.log("📥 Mensajes recibidos:", data);
-      setMessages(data || {});
-    }, (error) => {
-      console.error("❌ Error Firebase:", error);
-    });
+    const messagesRef = ref(database, `games/${gameId}/messages`);
+    const unsubscribe = onValue(messagesRef, 
+      (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          const msgs = Object.entries(data).map(([id, value]) => ({
+            id,
+            ...value
+          })).sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+          setMessages(msgs);
+          setError('');
+        } else {
+          setMessages([]);
+        }
+      },
+      (error) => {
+        console.error('Error al cargar mensajes:', error);
+        setError('No se pudieron cargar los mensajes. Verifica permisos.');
+      }
+    );
 
     return () => unsubscribe();
-  }, [id]);
+  }, [gameId]);
 
-  // Enviar mensaje
   const handleSendMessage = async (e) => {
     e.preventDefault();
-
+    
+    if (!newMessage.trim()) return;
+    
     if (!user) {
-      alert('Debes iniciar sesión');
+      setError('Debes iniciar sesión para enviar mensajes');
       return;
     }
 
-    if (!newMessage.trim() || !id) return;
-
-    setSending(true);
-
     try {
-      const messageData = {
-        author: user.email,
-        authorName: user.displayName || user.email.split('@')[0],
+      const messagesRef = ref(database, `games/${gameId}/messages`);
+      await push(messagesRef, {
         text: newMessage.trim(),
-        timestamp: Date.now(),
-        photoURL: user.photoURL || null
-      };
-
-      console.log("📤 Enviando:", messageData);
-
-      const messagesRef = ref(database, `messages/${id}`);
-      await push(messagesRef, messageData);
-      
+        user: user.displayName || user.email || 'Usuario',
+        userId: user.uid,
+        timestamp: Date.now()
+      });
       setNewMessage('');
-    } catch (error) {
-      console.error('❌ Error:', error);
-      alert('Error al enviar: ' + error.message);
-    } finally {
-      setSending(false);
+      setError('');
+    } catch (err) {
+      console.error('Error detallado:', err);
+      setError(`Error: ${err.message}. Verifica las reglas de Firebase.`);
     }
   };
 
-  if (authLoading) {
-    return (
-      <div className="container mt-5 text-center">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Cargando...</span>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="container mt-4">
-      <div className="row">
-        <div className="col-md-8 mx-auto">
-          
-          {/* Botón volver */}
-          <button 
-            className="btn btn-link mb-2"
-            onClick={() => navigate('/games')}
+    <div style={{ padding: '1rem', maxWidth: '600px', margin: '0 auto' }}>
+      <h2>Mensajes del Juego {gameId}</h2>
+      
+      {!user && (
+        <div style={{ 
+          backgroundColor: '#fff3cd', 
+          color: '#856404', 
+          padding: '0.75rem', 
+          borderRadius: '4px',
+          marginBottom: '1rem'
+        }}>
+          ⚠️ Necesitas <button 
+            onClick={() => {/* Aquí tu función de login */}} 
+            style={{ background: 'none', border: 'none', color: 'blue', textDecoration: 'underline', cursor: 'pointer' }}
           >
-            ← Volver a partidos
-          </button>
-
-          <div className="card shadow">
-            <div className="card-header bg-primary text-white">
-              <div className="d-flex justify-content-between align-items-center">
-                <h5 className="mb-0">
-                  Chat del Partido {id && `#${id}`}
-                </h5>
-                <span className="badge bg-light text-primary">
-                  {Object.keys(messages).length} mensajes
-                </span>
-              </div>
-            </div>
-
-            <div className="card-body p-0">
-              
-              {/* MessageList desde src/MessageList.jsx */}
-              <MessageList
-                messages={messages}
-                currentUser={user}
-              />
-
-              {/* Input de mensaje */}
-              <div className="p-3 border-top">
-                {!user ? (
-                  <div className="alert alert-info mb-0 text-center">
-                    Inicia sesión para participar en el chat
-                  </div>
-                ) : (
-                  <form onSubmit={handleSendMessage} className="d-flex gap-2">
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Escribe tu mensaje..."
-                      value={newMessage}
-                      onChange={(e) => setNewMessage(e.target.value)}
-                      disabled={sending}
-                      maxLength="500"
-                    />
-                    <button
-                      type="submit"
-                      className="btn btn-primary"
-                      disabled={sending || !newMessage.trim()}
-                    >
-                      {sending ? 'Enviando...' : 'Enviar'}
-                    </button>
-                  </form>
-                )}
-              </div>
-
-            </div>
-          </div>
+            iniciar sesión
+          </button> para enviar mensajes
         </div>
+      )}
+      
+      {error && (
+        <div style={{ 
+          backgroundColor: '#f8d7da', 
+          color: '#721c24', 
+          padding: '0.75rem', 
+          borderRadius: '4px',
+          marginBottom: '1rem'
+        }}>
+          ❌ {error}
+        </div>
+      )}
+
+      <div style={{ 
+        maxHeight: '400px', 
+        overflowY: 'auto', 
+        marginBottom: '1rem', 
+        border: '1px solid #ddd',
+        borderRadius: '4px',
+        padding: '1rem',
+        backgroundColor: '#f9f9f9'
+      }}>
+        {messages.length === 0 ? (
+          <p style={{ color: '#666', textAlign: 'center' }}>No hay mensajes aún. ¡Sé el primero!</p>
+        ) : (
+          messages.map(msg => (
+            <div 
+              key={msg.id} 
+              style={{ 
+                marginBottom: '0.75rem',
+                padding: '0.5rem',
+                backgroundColor: msg.userId === user?.uid ? '#e3f2fd' : 'white',
+                borderRadius: '4px',
+                border: '1px solid #eee'
+              }}
+            >
+              <strong style={{ color: '#333' }}>{msg.user}:</strong>{' '}
+              <span style={{ color: '#555' }}>{msg.text}</span>
+              <div style={{ fontSize: '0.75rem', color: '#999', marginTop: '0.25rem' }}>
+                {new Date(msg.timestamp).toLocaleString()}
+              </div>
+            </div>
+          ))
+        )}
       </div>
+
+      <form onSubmit={handleSendMessage} style={{ display: 'flex', gap: '0.5rem' }}>
+        <input
+          type="text"
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          placeholder={user ? "Escribe tu mensaje..." : "Inicia sesión para escribir"}
+          disabled={!user}
+          style={{ 
+            flex: 1, 
+            padding: '0.75rem',
+            border: '1px solid #ccc',
+            borderRadius: '4px',
+            fontSize: '1rem'
+          }}
+        />
+        <button 
+          type="submit" 
+          disabled={!user || !newMessage.trim()}
+          style={{ 
+            padding: '0.75rem 1.5rem',
+            backgroundColor: !user || !newMessage.trim() ? '#ccc' : '#007bff',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: !user || !newMessage.trim() ? 'not-allowed' : 'pointer',
+            fontSize: '1rem'
+          }}
+        >
+          Enviar
+        </button>
+      </form>
     </div>
   );
 }
