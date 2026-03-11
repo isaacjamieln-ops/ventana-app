@@ -13,8 +13,7 @@ import {
 import { getDatabase, ref, push, onValue } from "firebase/database";
 import { useState, useEffect } from "react";
 
-
-// Configuración de tu Firebase
+// Configuración de Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyBp7uyQGenv7Tnw6SC5KqjTKz1MeDJ1IMo",
   authDomain: "ventana-app-nyls.firebaseapp.com",
@@ -35,80 +34,84 @@ const provider = new GoogleAuthProvider();
 // Database
 const database = getDatabase(app);
 
-
+// ------------------------------
 // Funciones de autenticación
+// ------------------------------
 const signInWithGoogle = async () => {
-  await signInWithPopup(auth, provider);
+  try {
+    await signInWithPopup(auth, provider);
+  } catch (error) {
+    console.error("Error al iniciar sesión:", error.message);
+  }
 };
 
 const signOutUser = async () => {
-  await signOut(auth);
+  try {
+    await signOut(auth);
+  } catch (error) {
+    console.error("Error al cerrar sesión:", error.message);
+  }
 };
 
-
-// Hook para obtener estado del usuario
+// ------------------------------
+// Hook para estado del usuario
+// ------------------------------
 const useUserState = () => {
-
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-
     const unsubscribe = onAuthStateChanged(auth, (u) => {
       setUser(u);
       setLoading(false);
     });
 
     return () => unsubscribe();
-
   }, []);
 
   return { user, loading };
-
 };
 
-
+// ------------------------------
 // Funciones de mensajes
+// ------------------------------
 const sendMessage = async (user, text, gameId) => {
+  if (!user || !text || !gameId) return;
 
-  if (!user || !text) return;
-
-  const messagesRef = ref(database, `games/${gameId}/messages`);
-
-  await push(messagesRef, {
-    text,
-    user: {
-      uid: user.uid,
-      name: user.displayName || user.email,
-      photoURL: user.photoURL || null
-    },
-    timestamp: Date.now()
-  });
-
+  try {
+    const messagesRef = ref(database, `games/${gameId}/messages`);
+    await push(messagesRef, {
+      text,
+      user: {
+        uid: user.uid,
+        name: user.displayName || user.email,
+        photoURL: user.photoURL || null
+      },
+      timestamp: Date.now()
+    });
+  } catch (error) {
+    console.error("Error al enviar mensaje:", error.message);
+  }
 };
-
 
 const listenMessages = (gameId, callback) => {
+  if (!gameId || typeof callback !== "function") return () => {};
 
   const messagesRef = ref(database, `games/${gameId}/messages`);
 
-  return onValue(messagesRef, snapshot => {
-
+  return onValue(messagesRef, (snapshot) => {
     const data = snapshot.val() || {};
-
     const messages = Object.entries(data).map(([id, value]) => ({
       id,
       ...value
     }));
-
     callback(messages);
-
   });
-
 };
 
-
+// ------------------------------
 // Exporta todo
+// ------------------------------
 export {
   auth,
   database,
