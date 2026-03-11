@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "prod": "app-react-cbd1c",
+    "default": "app-react-cbd1c"
+  },
+  "targets": {},
+  "etags": {}
+}
