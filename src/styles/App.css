@@ -26,3 +26,14 @@
 .navbar-brand:hover {
   color: rgba(255, 255, 255, 0.9) !important;
 }
+
+body {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(0, 120, 255, 0.35), transparent 40%),
+    radial-gradient(circle at 80% 30%, rgba(170, 0, 255, 0.35), transparent 40%),
+    radial-gradient(circle at 50% 80%, rgba(0, 80, 255, 0.25), transparent 45%),
+    #0b0f2a;
+
+  min-height: 100vh;
+  color: #e6e9ff;
+}
