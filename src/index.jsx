@@ -3,9 +3,11 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App.jsx';
 
-import 'bootstrap/dist/css/bootstrap.min.css';       // Bootstrap CSS
-// import 'bootstrap-icons/font/bootstrap-icons.css';    // Bootstrap Icons
-import './styles/App.css';                            // Tu CSS global
+import 'bootstrap/dist/css/bootstrap.min.css';       
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';   // 👈 ESTA ES LA LINEA QUE FALTA
+
+import 'bootstrap-icons/font/bootstrap-icons.css';    // 👈 vuelve a activarla
+import './styles/App.css';
 
 const rootElement = document.getElementById('root');
 
@@ -14,6 +16,7 @@ if (!rootElement) {
 }
 
 const root = ReactDOM.createRoot(rootElement);
+
 root.render(
   <React.StrictMode>
     <BrowserRouter>
