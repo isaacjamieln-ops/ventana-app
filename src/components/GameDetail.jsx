@@ -1,15 +1,19 @@
+// src/components/GameDetail.js
 import React from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import { useParams, Link } from 'react-router-dom';
 import nyslData from '../data/nyslData';
 import GameMessages from './GameMessages'; // 👈 IMPORTANTE
+import { useUserState } from '../firebase'; // 👈 IMPORTANTE
 
 const GameDetail = () => {
-
   const { id } = useParams();
   const { games, locations } = nyslData;
 
   const game = games[id] || null;
+  const location = locations[game?.locationKey];
+
+  const { user, loading } = useUserState(); // Hook para usuario
 
   if (!game) {
     return (
@@ -21,8 +25,6 @@ const GameDetail = () => {
       </Container>
     );
   }
-
-  const location = locations[game.locationKey];
 
   return (
     <Container>
@@ -71,9 +73,7 @@ const GameDetail = () => {
               {location?.mapUrl && (
                 <Row className="mb-4">
                   <Col>
-
                     <h5 className="text-primary mb-3">Map</h5>
-
                     <div className="ratio ratio-16x9">
                       <iframe
                         src={location.mapUrl}
@@ -83,22 +83,26 @@ const GameDetail = () => {
                         style={{ border: 0, borderRadius: '8px' }}
                       />
                     </div>
-
                   </Col>
                 </Row>
               )}
 
               <hr />
 
-              {/* 👇 AQUI AGREGAMOS EL FORO DEL PARTIDO */}
+              {/* 👇 Foro del partido con manejo de usuario */}
               <Row className="mb-4">
                 <Col>
+                  <h5 className="text-primary mb-3">💬 Game Chat</h5>
 
-                  <h5 className="text-primary mb-3">
-                    💬 Game Chat
-                  </h5>
-
-                  <GameMessages gameId={id} />
+                  {loading ? (
+                    <p>Cargando usuario...</p>
+                  ) : user ? (
+                    <GameMessages gameId={id} user={user} /> // 👈 pasamos el user
+                  ) : (
+                    <p className="text-danger">
+                      Debes iniciar sesión para ver o enviar mensajes.
+                    </p>
+                  )}
 
                 </Col>
               </Row>
@@ -108,19 +112,11 @@ const GameDetail = () => {
               <Row>
                 <Col className="d-flex justify-content-between">
 
-                  <Button
-                    as={Link}
-                    to="/games"
-                    variant="outline-primary"
-                  >
+                  <Button as={Link} to="/games" variant="outline-primary">
                     ← Back to Schedule
                   </Button>
 
-                  <Button
-                    as={Link}
-                    to="/"
-                    variant="outline-secondary"
-                  >
+                  <Button as={Link} to="/" variant="outline-secondary">
                     Home
                   </Button>
 
