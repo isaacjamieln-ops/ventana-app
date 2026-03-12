@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/ventana-app/static/css/main.32145483.css",
-    "main.js": "/ventana-app/static/js/main.75df6fba.js",
+    "main.js": "/ventana-app/static/js/main.abb28a43.js",
     "static/media/bootstrap-icons.woff?": "/ventana-app/static/media/bootstrap-icons.1295669cd4e305c97f2c.woff",
     "static/media/bootstrap-icons.woff2?": "/ventana-app/static/media/bootstrap-icons.92ea18a81d737146ff04.woff2",
     "index.html": "/ventana-app/index.html",
     "main.32145483.css.map": "/ventana-app/static/css/main.32145483.css.map",
-    "main.75df6fba.js.map": "/ventana-app/static/js/main.75df6fba.js.map"
+    "main.abb28a43.js.map": "/ventana-app/static/js/main.abb28a43.js.map"
   },
   "entrypoints": [
     "static/css/main.32145483.css",
-    "static/js/main.75df6fba.js"
+    "static/js/main.abb28a43.js"
   ]
 }
