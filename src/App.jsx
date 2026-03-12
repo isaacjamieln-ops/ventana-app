@@ -12,19 +12,29 @@ import Contact from './components/Contact';
 import Rules from './components/Rules';
 import Registration from './components/Registration';
 
+import Photos from "./components/Photos";
+import PhotosGallery from "./components/PhotosGallery";
+
+import { useUserState } from './firebase';
+
 import './styles/App.css';
 
 function App() {
+
+  const { user } = useUserState();
+
   return (
-    <div className="App text-white">   {/* ← ESTA ES LA SOLUCIÓN */}
+
+    <div className="App text-white">
 
       <Navbar />
 
       <Routes>
+
         <Route path="/" element={<Home />} />
+
         <Route path="/games" element={<GameInfo />} />
 
-        {/* Aquí estará mapa + foro */}
         <Route path="/game/:id" element={<GameDetail />} />
 
         <Route path="/about" element={<About />} />
@@ -32,11 +42,31 @@ function App() {
         <Route path="/rules" element={<Rules />} />
         <Route path="/register" element={<Registration />} />
 
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route
+          path="/fotos/:id"
+          element={<Photos user={user} />}
+        />
+
+        {/* Galería global */}
+
+        <Route
+          path="/photos"
+          element={<PhotosGallery />}
+        />
+
+        {/* ESTA SIEMPRE VA AL FINAL */}
+
+        <Route
+          path="*"
+          element={<Navigate to="/" />}
+        />
+
       </Routes>
 
     </div>
+
   );
+
 }
 
 export default App;
