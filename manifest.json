@@ -3,23 +3,23 @@
   "name": "Ventana App",
   "icons": [
     {
-      "src": "%PUBLIC_URL%/assets/manifest-icon-192.png",
+      "src": "/ventana-app/assets/manifest-icon-192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "%PUBLIC_URL%/assets/manifest-icon-192.maskable.png",
+      "src": "/ventana-app/assets/manifest-icon-192.maskable.png",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "maskable"
     },
     {
-      "src": "%PUBLIC_URL%/assets/manifest-icon-512.png",
+      "src": "/ventana-app/assets/manifest-icon-512.png",
       "type": "image/png",
       "sizes": "512x512"
     },
     {
-      "src": "%PUBLIC_URL%/assets/manifest-icon-512.maskable.png",
+      "src": "/ventana-app/assets/manifest-icon-512.maskable.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"
