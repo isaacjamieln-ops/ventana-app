@@ -1,41 +1,32 @@
 {
-  "short_name": "Ventana",
+  "short_name": "VentanaApp",
   "name": "Ventana App",
-  "description": "Aplicación web progresiva de Ventana App con chat y horarios de juegos.",
-  "start_url": ".",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#0d6efd",
-  "orientation": "portrait",
   "icons": [
     {
-      "src": "assets/manifest-icon-192.png",
-      "sizes": "192x192",
+      "src": "%PUBLIC_URL%/assets/manifest-icon-192.png",
       "type": "image/png",
-      "purpose": "any"
+      "sizes": "192x192"
     },
     {
-      "src": "assets/manifest-icon-192.maskable.png",
-      "sizes": "192x192",
+      "src": "%PUBLIC_URL%/assets/manifest-icon-192.maskable.png",
       "type": "image/png",
+      "sizes": "192x192",
       "purpose": "maskable"
     },
     {
-      "src": "assets/manifest-icon-512.png",
-      "sizes": "512x512",
+      "src": "%PUBLIC_URL%/assets/manifest-icon-512.png",
       "type": "image/png",
-      "purpose": "any"
+      "sizes": "512x512"
     },
     {
-      "src": "assets/manifest-icon-512.maskable.png",
-      "sizes": "512x512",
+      "src": "%PUBLIC_URL%/assets/manifest-icon-512.maskable.png",
       "type": "image/png",
+      "sizes": "512x512",
       "purpose": "maskable"
-    },
-    {
-      "src": "assets/favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
     }
-  ]
+  ],
+  "start_url": "/ventana-app/",
+  "display": "standalone",
+  "theme_color": "#4a90e2",
+  "background_color": "#ffffff"
 }
