@@ -16,8 +16,10 @@ import Photos from "./components/Photos";
 import PhotosGallery from "./components/PhotosGallery";
 
 import { useUserState } from './firebase';
+import InstallPWA from "./components/InstallPWA";
 
 import './styles/App.css';
+
 
 function App() {
 
@@ -29,6 +31,8 @@ function App() {
 
       <Navbar />
 
+      <InstallPWA />
+
       <Routes>
 
         <Route path="/" element={<Home />} />
@@ -38,8 +42,11 @@ function App() {
         <Route path="/game/:id" element={<GameDetail />} />
 
         <Route path="/about" element={<About />} />
+
         <Route path="/contact" element={<Contact />} />
+
         <Route path="/rules" element={<Rules />} />
+
         <Route path="/register" element={<Registration />} />
 
         <Route
@@ -47,14 +54,12 @@ function App() {
           element={<Photos user={user} />}
         />
 
-        {/* Galería global */}
-
         <Route
           path="/photos"
           element={<PhotosGallery />}
         />
 
-        {/* ESTA SIEMPRE VA AL FINAL */}
+        {/* REDIRECCIÓN FINAL */}
 
         <Route
           path="*"

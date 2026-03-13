@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Redirecting...</title>
+
+<script>
+var path = window.location.pathname;
+var repo = "/ventana-app";
+
+sessionStorage.redirect = path;
+
+window.location.replace(repo + "/");
+</script>
+
+</head>
+<body>
+Redirecting...
+</body>
+</html>
