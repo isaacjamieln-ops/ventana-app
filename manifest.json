@@ -3,26 +3,36 @@
   "name": "Ventana App",
   "icons": [
     {
-      "src": "/ventana-app/assets/manifest-icon-192.png",
+      "src": "%PUBLIC_URL%/assets/manifest-icon-192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/ventana-app/assets/manifest-icon-192.maskable.png",
+      "src": "%PUBLIC_URL%/assets/manifest-icon-192.maskable.png",
       "type": "image/png",
       "sizes": "192x192",
       "purpose": "maskable"
     },
     {
-      "src": "/ventana-app/assets/manifest-icon-512.png",
+      "src": "%PUBLIC_URL%/assets/manifest-icon-512.png",
       "type": "image/png",
       "sizes": "512x512"
     },
     {
-      "src": "/ventana-app/assets/manifest-icon-512.maskable.png",
+      "src": "%PUBLIC_URL%/assets/manifest-icon-512.maskable.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"
+    },
+    {
+      "src": "%PUBLIC_URL%/assets/apple-icon-180.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    },
+    {
+      "src": "%PUBLIC_URL%/assets/favicon-196.png",
+      "type": "image/png",
+      "sizes": "196x196"
     }
   ],
   "start_url": "/ventana-app/",
